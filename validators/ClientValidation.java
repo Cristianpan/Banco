@@ -17,19 +17,19 @@ public class ClientValidation {
         return true;
     }
 
-    public boolean validarNumeroDeCliente(String numeroDeCliente) throws InvalidDataException {
+    public boolean validarIdCliente(String idCliente) throws InvalidDataException {
         Pattern patronNumCliente = Pattern.compile("[0-9]{16}");
         
-        if (!isMatch(numeroDeCliente, patronNumCliente)) {
+        if (!isMatch(idCliente, patronNumCliente)) {
             throw new InvalidDataException(
-                    "El no. de cliente" + numeroDeCliente + "es erroneo. Verifique que solo contenga 16 valores numericos");
+                    "El no. de cliente" + idCliente + "es erroneo. Verifique que solo contenga 16 valores numericos");
         }
 
         return true; 
     }
 
-    public boolean validarDatosCliente (String nombreCliente, String numeroDeCliente) throws InvalidDataException{
-        return validarNombre(nombreCliente) && validarNumeroDeCliente(numeroDeCliente); 
+    public boolean validarDatosCliente (String idCliente, String nombreCliente) throws InvalidDataException{
+        return validarNombre(nombreCliente) && validarIdCliente(idCliente); 
     }
 
 

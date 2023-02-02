@@ -1,8 +1,6 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 /**
@@ -10,36 +8,30 @@ import java.util.regex.Pattern;
  */
 public class Cliente {
 
-    private String numeroDeCliente;
+    private String idCliente;
     private String nombreCliente;
     private ArrayList<Cuenta> cuentasCliente;
 
-    public Cliente(String numeroDeCliente, String nombreCliente, Cuenta cuentaCliente) {
-        this.numeroDeCliente = numeroDeCliente;
-        this.nombreCliente = nombreCliente;
+    public Cliente(String[] datosCliente , Cuenta cuentaCliente) {
+        this.idCliente = datosCliente[0];
+        this.nombreCliente = datosCliente[1];
         this.cuentasCliente = new ArrayList<>();
         this.cuentasCliente.add(cuentaCliente);
     }
 
+
+    public Cliente(String[] datosCliente, ArrayList<Cuenta> cuentasCliente) {
+        this.idCliente = datosCliente[0];
+        this.nombreCliente = datosCliente[1];
+        this.cuentasCliente = cuentasCliente; 
+    }
+
     public void imprimirInformacionCliente() {
-        System.out.println("No. Cliente: " + this.numeroDeCliente + ", Nombre de Cliente: " + this.nombreCliente);
+        System.out.println("No. Cliente: " + this.idCliente + ", Nombre de Cliente: " + this.nombreCliente);
         System.out.println("Cuentas");
         for (Cuenta cuentaCliente : cuentasCliente) {
             cuentaCliente.imprimirInformacionCuenta();
         }
-    }
-
-    public boolean isMatch(String cadena, Pattern patron) {
-        Matcher mat = patron.matcher(cadena);
-        return mat.matches();
-    }
-
-    public String getNumeroDeCliente() {
-        return numeroDeCliente;
-    }
-
-    public void setNumeroDeCliente(String numeroDeCliente) {
-        this.numeroDeCliente = numeroDeCliente;
     }
 
     public String getNombreCliente() {
@@ -56,6 +48,10 @@ public class Cliente {
 
     public void setCuentaCliente(Cuenta cuentaCliente) {
         this.cuentasCliente.add(cuentaCliente);
+    }
+
+    public String getIdCliente() {
+        return idCliente;
     }
 
 }

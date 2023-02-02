@@ -1,22 +1,26 @@
 package test;
 
-import controllers.CtrlClients;
+import controllers.CtrlBanco;
 
 public class CuentaBanco {
     public static void main(String[] args) {
 
-        CtrlClients ctrlClients = new CtrlClients(); 
-        String msg; 
-        try {
-            msg = ctrlClients.agregarRegistro("3012345689111111","1111111111111114", "399"); 
-            System.out.println(msg);
-        } catch (NumberFormatException e) {
-            System.out.println("Verifique que el dato saldo contenga datos validos");
+        CtrlBanco ctrlBanco = new CtrlBanco(); 
+
+
+       try {
+            //ctrlBanco.agregarCliente("1234567891234588", "Diana Carolina Vazquez Rodriguez", "1234567891234568", "0");
+            //ctrlBanco.añadirSaldoCuenta("1234567891234567", "1234567891234567", "200");    
+            
+            //ctrlBanco.agregarCuentaCliente( "1234567891234567","1234567891234588", "100");
+            ctrlBanco.modificarCliente("1234567891234567", "Diana Carolina Vazquez");
+            ctrlBanco.generarReporte();
+            
+            
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
-
-
     }
+
 }

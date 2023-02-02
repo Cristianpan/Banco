@@ -1,13 +1,11 @@
 package models;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import java.io.Serializable;
 
 /**
  * Cuenta
  */
-public class Cuenta {
+public class Cuenta implements Serializable {
     private String numeroDeCuenta;
     private float saldo;
 
@@ -18,11 +16,6 @@ public class Cuenta {
 
     public void imprimirInformacionCuenta() {
         System.out.println("No. cuenta: " + this.numeroDeCuenta + ", Saldo: $" + saldo);
-    }
-
-    public boolean isMatch(String cadena, Pattern patron) {
-        Matcher mat = patron.matcher(cadena);
-        return mat.matches();
     }
 
     // funcionalidades para numero de cuenta
@@ -36,7 +29,7 @@ public class Cuenta {
 
     // funcionalidades para saldo
     public void setSaldo(float saldo) {
-        this.saldo = saldo;
+        this.saldo += saldo;
     }
 
     public float getSaldo() {
