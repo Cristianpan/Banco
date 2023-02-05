@@ -2,9 +2,7 @@ package daos;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import errors.DeleteException;
-import errors.ExistAccountException;
+import errors.NotFoundAccountOfClient;
 import models.Cuenta;
 import utils.Ereaser;
 import utils.Serializer;
@@ -38,7 +36,7 @@ public class DaoCuentas {
         return cuentasCliente;
     }
 
-    public Cuenta obtenerCuenta(String idCliente, String numeroDeCuenta) throws ExistAccountException {
+    public Cuenta obtenerCuenta(String idCliente, String numeroDeCuenta) throws NotFoundAccountOfClient {
         String pathCuentaCliente = path + "/" + idCliente + "/" + numeroDeCuenta + ".dat";
 
         File archivoCuenta = new File(pathCuentaCliente);
@@ -46,8 +44,7 @@ public class DaoCuentas {
         if (archivoCuenta.exists()) {
             return Serializer.deserializarObjeto(pathCuentaCliente, Cuenta.class);
         } else {
-            throw new ExistAccountException(
-                    "El no. de cuenta: " + numeroDeCuenta + ", no corresponde al no. de cliente: " + idCliente);
+            throw new NotFoundAccountOfClient(idCliente, numeroDeCuenta); 
         }
 
     }
@@ -66,7 +63,7 @@ public class DaoCuentas {
         }
     }
 
-    public void actualizarCuentaCliente(String idCliente, Cuenta cuentaCliente) throws ExistAccountException {
+    public void actualizarCuentaCliente(String idCliente, Cuenta cuentaCliente) throws NotFoundAccountOfClient {
         String pathCuentaCliente = path + "/" + idCliente + "/" + cuentaCliente.getNumeroDeCuenta() + ".dat";
 
         File archivoCuenta = new File(pathCuentaCliente);
@@ -74,32 +71,18 @@ public class DaoCuentas {
         if (archivoCuenta.exists()) {
             Serializer.serializarObjeto(pathCuentaCliente, cuentaCliente);
         } else {
-            throw new ExistAccountException("El no. de cuenta: " + cuentaCliente.getNumeroDeCuenta()
-                    + ", no corresponde al no. de cliente: " + idCliente);
+            throw new NotFoundAccountOfClient(idCliente, cuentaCliente.getNumeroDeCuenta()); 
         }
     }
 
     public int eliminarCuentaCLiente(String idCliente, String numeroDeCuenta) {
         String pathCuentaCliente = path + "/" + idCliente + "/" + numeroDeCuenta + ".dat";
         Ereaser.DeleteFile(pathCuentaCliente);
-
-        /*
-         * if (archivoCuenta.exists()) {
-         * Cuenta cuentaCliente = Serializer.deserializarObjeto(pathCuentaCliente,
-         * Cuenta.class);
-         * if (cuentaCliente.getSaldo() <= 0){
-         * archivoCuenta.delete();
-         * } else {
-         * throw new DeleteException ("Error al eliminar la cuenta" + numeroDeCuenta +
-         * ". Por favor retire todos los fondos e intente de nuevo.");
-         * }
-         * } else {
-         * throw new ExistAccountException ("El no. de cuenta: " + numeroDeCuenta +
-         * ", no corresponde al no. de cliente: " + idCliente);
-         * }
-         */
-
          return new File(path + "/" + idCliente).list().length; 
+    }
+
+    public void eliminarCuentasCliente(String idCliente) {
+        Ereaser.DeleteFile(path + "/" + idCliente);
     }
 
     public boolean existeCuenta(String cuenta) {

@@ -1,23 +1,14 @@
 package controllers;
 
-import java.util.ArrayList;
-
-import daos.DaoClientes;
-import daos.DaoCuentas;
-import errors.DeleteException;
-import errors.ExistAccountException;
-import errors.InvalidDataException;
-import errors.NotFoundClientException;
-import errors.NumberClientException;
-import models.Cliente;
-import models.Cuenta;
-import utils.Ereaser;
-import validators.AccountValidation;
-import validators.ClientValidation;
+import daos.*;
+import errors.*;
+import models.*;
+import validators.*;
 
 public class CtrlBanco {
-    public void agregarCliente(String idCliente, String nombreCliente, String noCuenta, String saldo)
-            throws InvalidDataException, NumberFormatException, NumberClientException, ExistAccountException {
+    public int agregarCliente(String idCliente, String nombreCliente, String noCuenta, String saldo)
+            throws InvalidDataException, NumberFormatException, ExistNumberClientException, ExistAccountException {
+
         AccountValidation accountValidation = new AccountValidation();
         ClientValidation clientValidation = new ClientValidation();
 
@@ -27,81 +18,93 @@ public class CtrlBanco {
         DaoClientes daoClientes = new DaoClientes();
         DaoCuentas daoCuentas = new DaoCuentas();
 
-        if (daoClientes.existeIdCliente(idCliente) >= 0) {
-            throw new NumberClientException(
-                    "Error al hacer el registro. El no. de cliente " + idCliente + " ya ha sido asignado");
+        if (daoClientes.existeIdCliente(idCliente)) {
+            throw new ExistNumberClientException(idCliente);
 
         } else if (daoCuentas.existeCuenta(noCuenta)) {
-            throw new ExistAccountException("Error al hacer el registro. El numero de cuenta " + noCuenta
-                    + " ya ha sido asignado a un cliente");
+            throw new ExistAccountException(noCuenta);
+
         } else {
             daoCuentas.agregarCuentaCliente(idCliente, new Cuenta(noCuenta, Float.parseFloat(saldo)));
             daoClientes.agregarCliente(idCliente, nombreCliente);
-            System.out.println("Registro con exito");
         }
+
+        return 1;
     }
 
-    public void agregarCuentaCliente(String idCliente, String noCuenta, String saldo)
-            throws InvalidDataException, NumberFormatException, ExistAccountException {
+    public int agregarCuentaCliente(String idCliente, String noCuenta, String saldo)
+            throws InvalidDataException, NumberFormatException, ExistAccountException, NotFoundClientException {
+
         AccountValidation accountValidation = new AccountValidation();
         accountValidation.validarCuenta(noCuenta);
 
         DaoCuentas daoCuentas = new DaoCuentas();
+        DaoClientes daoClientes = new DaoClientes();
 
-        if (!daoCuentas.existeCuenta(noCuenta)) {
-            daoCuentas.agregarCuentaCliente(idCliente, new Cuenta(noCuenta, Float.parseFloat(saldo)));
-            System.out.println("Nueva cuenta agrega al cliente: " + idCliente);
+        if (daoClientes.existeIdCliente(idCliente)) {
+            if (!daoCuentas.existeCuenta(noCuenta)) {
+                daoCuentas.agregarCuentaCliente(idCliente, new Cuenta(noCuenta, Float.parseFloat(saldo)));
+            } else {
+                throw new ExistAccountException(noCuenta);
+            }
         } else {
-            throw new ExistAccountException(
-                    "La cuenta " + noCuenta + "ya ha sido registrada. Ingrese otro numero de cuenta");
+            throw new NotFoundClientException(idCliente);
         }
+
+        return 1;
     }
 
-    public void eliminarCuenta(String idCliente, String noCuenta) throws ExistAccountException, DeleteException {
+    public int eliminarCuenta(String idCliente, String noCuenta)
+            throws DeleteException, NotFoundAccountOfClient, NotFoundClientException {
         DaoCuentas daoCuentas = new DaoCuentas();
         Cuenta cuentaCliente = daoCuentas.obtenerCuenta(idCliente, noCuenta);
 
-        if (cuentaCliente.getSaldo() <= 0) {
+        if (!BalanceValidation.validarSaldo(cuentaCliente)) {
             if (daoCuentas.eliminarCuentaCLiente(idCliente, noCuenta) == 0) {
-                eliminarHistorial(idCliente);
+                new DaoClientes().eliminarCliente(idCliente);
             }
-
-            System.out.println("La cuenta: " + noCuenta + "ha sido eliminada del cliente: " + idCliente);
         } else {
             throw new DeleteException("Error al eliminar la cuenta" + noCuenta
                     + ". Por favor retire todos los fondos e intente de nuevo.");
         }
+
+        return 1;
     }
 
-    public void elimarCliente(String idCliente) throws NotFoundClientException, DeleteException {
+    public int elimarCliente(String idCliente) throws NotFoundClientException, DeleteException {
         DaoClientes daoClientes = new DaoClientes();
         Cliente cliente = daoClientes.obtenerCliente(idCliente);
 
-        if (!validarSaldo(cliente.getCuentasCliente())) {
-            eliminarHistorial(idCliente);
-            System.out.println("El cliente ha sido eliminado con exito");
+        if (!BalanceValidation.validarSaldo(cliente.getCuentasCliente())) {
+            daoClientes.eliminarCliente(idCliente);
         } else {
             throw new DeleteException(
                     "Error al eliminar al cliente.\nTiene una o mas cuentas con fondos. Por favor retirelos e intente nuevamente");
         }
+
+        return 1;
     }
 
-    public void modificarCliente(String idCliente, String nombreCliente) throws NotFoundClientException {
+    public int modificarCliente(String idCliente, String nombreCliente)
+            throws NotFoundClientException, InvalidDataException {
         DaoClientes daoClientes = new DaoClientes();
+        ClientValidation clientValidation = new ClientValidation();
 
+        clientValidation.validarNombre(nombreCliente);
         daoClientes.actualizarCliente(idCliente, nombreCliente);
-        System.out.println("Nombre del cliente actualizado");
+
+        return 1;
     }
 
-    public void añadirSaldoCuenta(String idCliente, String noCuenta, String deposito)
-            throws ExistAccountException, NumberFormatException {
+    public int añadirSaldoCuenta(String idCliente, String noCuenta, String deposito)
+            throws ExistAccountException, NumberFormatException, NotFoundAccountOfClient {
         DaoCuentas daoCuentas = new DaoCuentas();
         Cuenta cuenta = daoCuentas.obtenerCuenta(idCliente, noCuenta);
 
         cuenta.setSaldo(Float.parseFloat(deposito));
 
         daoCuentas.actualizarCuentaCliente(idCliente, cuenta);
-        System.out.println("Actualización de saldo de cuenta exitoso");
+        return 1;
     }
 
     public void generarReporte() {
@@ -112,19 +115,4 @@ public class CtrlBanco {
         }
     }
 
-    private boolean validarSaldo(ArrayList<Cuenta> cuentasCliente) {
-
-        for (Cuenta cuenta : cuentasCliente) {
-            if (cuenta.getSaldo() > 0) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private void eliminarHistorial(String idCliente) {
-        Ereaser.DeleteFile("./data/cuentas/" + idCliente);
-        Ereaser.DeleteFile("./data/clientes/" + idCliente + ".dat");
-    }
 }

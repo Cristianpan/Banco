@@ -1,8 +1,7 @@
 package errors;
 
 public class NotFoundClientException extends Exception {
-    public NotFoundClientException(String msg) {
-        super(msg);
-
+    public NotFoundClientException(String idCliente) {
+        super("Error, no se ha encontrado al cliente: " + idCliente);
     }
 }
