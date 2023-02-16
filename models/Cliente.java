@@ -1,37 +1,33 @@
 package models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
 /**
  * Cliente
  */
-public class Cliente {
+public class Cliente implements Serializable{
 
     private String idCliente;
     private String nombreCliente;
     private ArrayList<Cuenta> cuentasCliente;
 
-    public Cliente(String[] datosCliente , Cuenta cuentaCliente) {
+    public Cliente(String[] datosCliente, Cuenta cuentaCliente) {
         this.idCliente = datosCliente[0];
         this.nombreCliente = datosCliente[1];
         this.cuentasCliente = new ArrayList<>();
         this.cuentasCliente.add(cuentaCliente);
     }
 
-
     public Cliente(String[] datosCliente, ArrayList<Cuenta> cuentasCliente) {
         this.idCliente = datosCliente[0];
         this.nombreCliente = datosCliente[1];
-        this.cuentasCliente = cuentasCliente; 
+        this.cuentasCliente = cuentasCliente;
     }
 
-    public void imprimirInformacionCliente() {
-        System.out.println("No. Cliente: " + this.idCliente + ", Nombre de Cliente: " + this.nombreCliente);
-        System.out.println("Cuentas");
-        for (Cuenta cuentaCliente : cuentasCliente) {
-            cuentaCliente.imprimirInformacionCuenta();
-        }
+    public String ObtenerDatosCliente() {
+        return "No. Cliente: " + this.idCliente + "               Nombre: " + this.nombreCliente + "\n";
     }
 
     public String getNombreCliente() {

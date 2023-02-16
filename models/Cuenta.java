@@ -5,6 +5,7 @@ import java.io.Serializable;
 /**
  * Cuenta
  */
+
 public class Cuenta implements Serializable {
     private String numeroDeCuenta;
     private float saldo;
@@ -14,8 +15,9 @@ public class Cuenta implements Serializable {
         this.saldo = saldo;
     }
 
-    public void imprimirInformacionCuenta() {
-        System.out.println("No. cuenta: " + this.numeroDeCuenta + ", Saldo: $" + saldo);
+    public String obtenerInformacionCuenta() {
+
+        return "No. cuenta: " + this.numeroDeCuenta + "               Saldo: $" + saldo + "\n";
     }
 
     // funcionalidades para numero de cuenta

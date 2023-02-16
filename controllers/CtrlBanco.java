@@ -90,7 +90,7 @@ public class CtrlBanco {
         DaoClientes daoClientes = new DaoClientes();
         ClientValidation clientValidation = new ClientValidation();
 
-        clientValidation.validarNombre(nombreCliente);
+        clientValidation.validarDatosCliente(idCliente, nombreCliente); 
         daoClientes.actualizarCliente(idCliente, nombreCliente);
 
         return 1;
@@ -109,10 +109,9 @@ public class CtrlBanco {
 
     public void generarReporte() {
         DaoClientes daoClientes = new DaoClientes();
-
-        for (Cliente cliente : daoClientes.obtenerClientes()) {
-            cliente.imprimirInformacionCliente();
-        }
+        ReporteCliente reporteCliente = new ReporteCliente(); 
+        reporteCliente.generarReporte(daoClientes.obtenerClientes());
     }
 
 }
+

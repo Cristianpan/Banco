@@ -20,7 +20,7 @@ public class DaoClientes {
 
         for (String archivoCliente : archivosClientes) {
             clientes.add(new Cliente(Serializer.deserializarObjeto(path + "/" + archivoCliente, String[].class),
-                    daoCuentas.obtenerCuentasPorCliente(archivoCliente)));
+                    daoCuentas.obtenerCuentasPorCliente(archivoCliente.replaceAll(".dat", ""))));
         }
 
         return clientes;
