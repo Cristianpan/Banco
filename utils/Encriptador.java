@@ -1,4 +1,4 @@
-package models;
+package utils;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -17,7 +17,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class Encriptador {
 
-    public SealedObject encrypt(Serializable objeto, String algoritmo, String clave)
+    public static SealedObject encrypt(Serializable objeto, String algoritmo, String clave)
             throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, IOException {
         SealedObject sealedObject;
 
@@ -29,14 +29,14 @@ public class Encriptador {
         return sealedObject;
     }
 
-    public <E> E decrypt(SealedObject objeto, String clave, Class<E> claseObjeto) throws NoSuchAlgorithmException, InvalidKeyException, ClassNotFoundException, IOException {
+    public static <E> E decrypt(SealedObject objeto, String clave, Class<E> claseObjeto) throws NoSuchAlgorithmException, InvalidKeyException, ClassNotFoundException, IOException {
         E obj = null; 
         SecretKey secretKey = obtenerSecretKey(clave, objeto.getAlgorithm()); 
         obj = (E) objeto.getObject(secretKey); 
         return obj;         
     }
 
-    private SecretKey obtenerSecretKey(String clave, String algoritmo)
+    private static SecretKey obtenerSecretKey(String clave, String algoritmo)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
         byte[] claveEncriptacion = clave.getBytes("UTF-8");
 
