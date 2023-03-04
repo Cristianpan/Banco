@@ -3,6 +3,7 @@ package daos;
 import java.io.File;
 import java.util.ArrayList;
 import errors.NotFoundAccountOfClient;
+import errors.NotFoundClientException;
 import models.Cuenta;
 import utils.Ereaser;
 import utils.Serializer;
@@ -23,7 +24,7 @@ public class DaoCuentas {
         }
     }
 
-    public ArrayList<Cuenta> obtenerCuentasPorCliente(String idCliente) {
+    public ArrayList<Cuenta> obtenerCuentasPorCliente(String idCliente) throws NotFoundClientException {
         ArrayList<Cuenta> cuentasCliente = new ArrayList<>();
         String pathCliente = path + "/" + idCliente;
 
@@ -31,6 +32,10 @@ public class DaoCuentas {
 
         for (String cuenta : cuentas) {
             cuentasCliente.add(Serializer.deserializarObjeto(pathCliente + "/" + cuenta, Cuenta.class));
+        } 
+
+        if (cuentasCliente.isEmpty()) {
+            throw new NotFoundClientException(idCliente); 
         }
 
         return cuentasCliente;

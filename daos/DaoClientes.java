@@ -13,7 +13,7 @@ import utils.Serializer;
 public class DaoClientes {
     private final String path = "./data/clientes";
 
-    public ArrayList<Cliente> obtenerClientes() {
+    public ArrayList<Cliente> obtenerClientes() throws NotFoundClientException {
         ArrayList<Cliente> clientes = new ArrayList<>();
         String[] archivosClientes = new File(path).list();
         DaoCuentas daoCuentas = new DaoCuentas();

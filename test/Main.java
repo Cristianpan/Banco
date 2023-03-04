@@ -1,11 +1,11 @@
 package test;
 
-import controllers.CtrlBanco;
+import controllers.CtrlUsuarios;
 
 public class Main {
     public static void main(String[] args) {
 
-        CtrlBanco ctrlBanco = new CtrlBanco(); 
+        CtrlUsuarios ctrlBanco = new CtrlUsuarios(); 
        try {
         ctrlBanco.agregarCliente("1234567891234567", "Cristian David Pan Zaldivar", "1234567891234567", "100");        
         ctrlBanco.generarReporte();
