@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import errors.NotFoundAccountOfClientException;
 import errors.NotFoundClientException;
 import models.Cuenta;
-import utils.Ereaser;
 import utils.Connection;
 
 public class DaoCuentas {
@@ -82,12 +81,12 @@ public class DaoCuentas {
 
     public int eliminarCuentaCLiente(String idCliente, String numeroDeCuenta) {
         String pathCuentaCliente = path + "/" + idCliente + "/" + numeroDeCuenta + ".dat";
-        Ereaser.deleteFile(pathCuentaCliente);
+        Connection.deleteFile(pathCuentaCliente);
          return new File(path + "/" + idCliente).list().length; 
     }
 
     public void eliminarCuentasCliente(String idCliente) {
-        Ereaser.deleteFile(path + "/" + idCliente);
+        Connection.deleteFile(path + "/" + idCliente);
     }
 
     public boolean existeCuenta(String cuenta) {

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import errors.NotFoundClientException;
 import models.Cliente;
-import utils.Ereaser;
 import utils.Connection;
 
 /**
@@ -48,7 +47,7 @@ public class DaoClientes {
     public void eliminarCliente(String idCliente) throws NotFoundClientException {
         if (existeIdCliente(idCliente)) {
             new DaoCuentas().eliminarCuentasCliente(idCliente);
-            Ereaser.deleteFile(path + "/" + idCliente + ".dat");
+            Connection.deleteFile(path + "/" + idCliente + ".dat");
         } else {
             throw new NotFoundClientException(idCliente);
         }

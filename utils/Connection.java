@@ -1,5 +1,6 @@
 package utils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -34,6 +35,16 @@ public class Connection {
             e.printStackTrace();
         }
         return objeto;
+    }
+
+    public static void deleteFile (String pathName) {
+        File archivo = new File(pathName); 
+        if (archivo.isDirectory()){
+            for (File archivos : archivo.listFiles()) {
+                archivos.delete(); 
+            }
+        }
+        archivo.delete(); 
     }
 
 }
