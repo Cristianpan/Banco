@@ -3,17 +3,15 @@ package controllers;
 import daos.*;
 import errors.*;
 import models.*;
+import reports.ReporteCliente;
 import validators.*;
 
-public class CtrlUsuarios {
+public class CtrlClientes {
     public int agregarCliente(String idCliente, String nombreCliente, String noCuenta, String saldo)
             throws InvalidDataException, NumberFormatException, ExistNumberClientException, ExistAccountException {
 
-        AccountValidation accountValidation = new AccountValidation();
-        ClientValidation clientValidation = new ClientValidation();
-
-        clientValidation.validarDatosCliente(idCliente, nombreCliente);
-        accountValidation.validarCuenta(noCuenta);
+        ClientValidation.validarDatosCliente(idCliente, nombreCliente);
+        AccountValidation.validarCuenta(noCuenta);
 
         DaoClientes daoClientes = new DaoClientes();
         DaoCuentas daoCuentas = new DaoCuentas();
@@ -54,9 +52,8 @@ public class CtrlUsuarios {
     public int modificarCliente(String idCliente, String nombreCliente)
             throws NotFoundClientException, InvalidDataException {
         DaoClientes daoClientes = new DaoClientes();
-        ClientValidation clientValidation = new ClientValidation();
 
-        clientValidation.validarDatosCliente(idCliente, nombreCliente); 
+        ClientValidation.validarDatosCliente(idCliente, nombreCliente); 
         daoClientes.actualizarCliente(idCliente, nombreCliente);
 
         return 1;

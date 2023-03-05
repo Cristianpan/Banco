@@ -5,7 +5,7 @@ import errors.InvalidDataException;
 import utils.Equalizer;
 
 public class AccountValidation {
-    public boolean validarCuenta (String numeroDeCuenta) throws InvalidDataException { 
+    public static boolean validarCuenta (String numeroDeCuenta) throws InvalidDataException { 
         Pattern patronNumeroDeCuenta = Pattern.compile("[0-9]{16}");
 
         if (!Equalizer.isMatch(numeroDeCuenta, patronNumeroDeCuenta)) {

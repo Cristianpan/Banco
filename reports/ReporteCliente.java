@@ -1,4 +1,4 @@
-package models;
+package reports;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -7,6 +7,9 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
+
+import models.Cliente;
+import models.Cuenta;
 
 /**
  * ReporteCliente

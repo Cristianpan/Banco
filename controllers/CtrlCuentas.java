@@ -1,15 +1,12 @@
 package controllers;
 
 import java.util.ArrayList;
-
-import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
-
 import daos.DaoClientes;
 import daos.DaoCuentas;
 import errors.DeleteException;
 import errors.ExistAccountException;
 import errors.InvalidDataException;
-import errors.NotFoundAccountOfClient;
+import errors.NotFoundAccountOfClientException;
 import errors.NotFoundClientException;
 import models.Cuenta;
 import validators.AccountValidation;
@@ -19,8 +16,7 @@ public class CtrlCuentas {
     public int agregarCuentaCliente(String idCliente, String noCuenta, String saldo)
             throws InvalidDataException, NumberFormatException, ExistAccountException, NotFoundClientException {
 
-        AccountValidation accountValidation = new AccountValidation();
-        accountValidation.validarCuenta(noCuenta);
+        AccountValidation.validarCuenta(noCuenta);
 
         DaoCuentas daoCuentas = new DaoCuentas();
         DaoClientes daoClientes = new DaoClientes();
@@ -43,14 +39,14 @@ public class CtrlCuentas {
         return daoCuentas.obtenerCuentasPorCliente(idCliente); 
     }
 
-    public Cuenta obtenerCuentaCliente (String idCliente, String numCuenta) throws NotFoundAccountOfClient {
+    public Cuenta obtenerCuentaCliente (String idCliente, String numCuenta) throws NotFoundAccountOfClientException {
         DaoCuentas daoCuentas = new DaoCuentas(); 
 
         return daoCuentas.obtenerCuenta(idCliente, numCuenta); 
     }
 
-    public int eliminarCuenta(String idCliente, String noCuenta)
-            throws DeleteException, NotFoundAccountOfClient, NotFoundClientException {
+    public int eliminarCuentaCLiente(String idCliente, String noCuenta)
+            throws DeleteException, NotFoundAccountOfClientException, NotFoundClientException {
         DaoCuentas daoCuentas = new DaoCuentas();
         Cuenta cuentaCliente = daoCuentas.obtenerCuenta(idCliente, noCuenta);
 
@@ -66,8 +62,8 @@ public class CtrlCuentas {
         return 1;
     }
 
-    public int añadirSaldoCuenta(String idCliente, String noCuenta, String deposito)
-            throws ExistAccountException, NumberFormatException, NotFoundAccountOfClient {
+    public int agregarSaldoCuenta(String idCliente, String noCuenta, String deposito)
+            throws ExistAccountException, NumberFormatException, NotFoundAccountOfClientException {
         DaoCuentas daoCuentas = new DaoCuentas();
         Cuenta cuenta = daoCuentas.obtenerCuenta(idCliente, noCuenta);
 

@@ -15,13 +15,13 @@ import javax.crypto.SealedObject;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-public class Encriptador {
+public class Encrypter {
 
     public static SealedObject encrypt(Serializable objeto, String algoritmo, String clave)
             throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, IOException {
         SealedObject sealedObject;
 
-        SecretKey secretKey = obtenerSecretKey(clave, algoritmo);
+        SecretKey secretKey = getSecretKey(clave, algoritmo);
         Cipher cipher = Cipher.getInstance(algoritmo);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         sealedObject = new SealedObject(objeto, cipher);
@@ -31,12 +31,12 @@ public class Encriptador {
 
     public static <E> E decrypt(SealedObject objeto, String clave, Class<E> claseObjeto) throws NoSuchAlgorithmException, InvalidKeyException, ClassNotFoundException, IOException {
         E obj = null; 
-        SecretKey secretKey = obtenerSecretKey(clave, objeto.getAlgorithm()); 
+        SecretKey secretKey = getSecretKey(clave, objeto.getAlgorithm()); 
         obj = (E) objeto.getObject(secretKey); 
-        return obj;         
+        return obj;        
     }
 
-    private static SecretKey obtenerSecretKey(String clave, String algoritmo)
+    private static SecretKey getSecretKey(String clave, String algoritmo)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
         byte[] claveEncriptacion = clave.getBytes("UTF-8");
 

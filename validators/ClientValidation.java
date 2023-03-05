@@ -6,11 +6,11 @@ import errors.InvalidDataException;
 import utils.Equalizer;
 
 public class ClientValidation {
-    public boolean validarDatosCliente (String idCliente, String nombreCliente) throws InvalidDataException{
+    public static boolean validarDatosCliente (String idCliente, String nombreCliente) throws InvalidDataException{
         return validarNombre(nombreCliente) && validarIdCliente(idCliente); 
     }
     
-    private boolean validarNombre(String nombreCliente) throws InvalidDataException {
+    private static boolean validarNombre(String nombreCliente) throws InvalidDataException {
         Pattern patronNombre = Pattern.compile("[a-zA-Z ]+");
 
         if (!Equalizer.isMatch(nombreCliente, patronNombre)) {
@@ -21,7 +21,7 @@ public class ClientValidation {
         return true;
     }
 
-    private boolean validarIdCliente(String idCliente) throws InvalidDataException {
+    private static boolean validarIdCliente(String idCliente) throws InvalidDataException {
         Pattern patronNumCliente = Pattern.compile("[0-9]{16}");
         
         if (!Equalizer.isMatch(idCliente, patronNumCliente)) {

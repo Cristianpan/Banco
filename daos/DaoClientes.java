@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import errors.NotFoundClientException;
 import models.Cliente;
 import utils.Ereaser;
-import utils.Serializer;
+import utils.Connection;
 
 /**
  * DaoClientes
@@ -19,7 +19,7 @@ public class DaoClientes {
         DaoCuentas daoCuentas = new DaoCuentas();
 
         for (String archivoCliente : archivosClientes) {
-            clientes.add(new Cliente(Serializer.deserializarObjeto(path + "/" + archivoCliente, String[].class),
+            clientes.add(new Cliente(Connection.readObject(path + "/" + archivoCliente, String[].class),
                     daoCuentas.obtenerCuentasPorCliente(archivoCliente.replaceAll(".dat", ""))));
         }
 
@@ -30,7 +30,7 @@ public class DaoClientes {
         DaoCuentas daoCuentas = new DaoCuentas();
 
         if (existeIdCliente(idCliente)) {
-            return new Cliente(Serializer.deserializarObjeto(path + "/" + idCliente + ".dat", String[].class),
+            return new Cliente(Connection.readObject(path + "/" + idCliente + ".dat", String[].class),
                     daoCuentas.obtenerCuentasPorCliente(idCliente));
         } else {
             throw new NotFoundClientException(idCliente);
@@ -39,7 +39,7 @@ public class DaoClientes {
 
     public void actualizarCliente(String idCliente, String nombreCliente) throws NotFoundClientException {
         if (existeIdCliente(idCliente)) {
-            Serializer.serializarObjeto(path + "/" + idCliente + ".dat", new String[] { idCliente, nombreCliente });
+            Connection.writeObject(path + "/" + idCliente + ".dat", new String[] { idCliente, nombreCliente });
         } else {
             throw new NotFoundClientException(idCliente);
         }
@@ -48,14 +48,14 @@ public class DaoClientes {
     public void eliminarCliente(String idCliente) throws NotFoundClientException {
         if (existeIdCliente(idCliente)) {
             new DaoCuentas().eliminarCuentasCliente(idCliente);
-            Ereaser.DeleteFile(path + "/" + idCliente + ".dat");
+            Ereaser.deleteFile(path + "/" + idCliente + ".dat");
         } else {
             throw new NotFoundClientException(idCliente);
         }
     }
 
     public void agregarCliente(String idCliente, String nombreCliente) {
-        Serializer.serializarObjeto(path + "/" + idCliente + ".dat", new String[] { idCliente, nombreCliente });
+        Connection.writeObject(path + "/" + idCliente + ".dat", new String[] { idCliente, nombreCliente });
     }
 
     public boolean existeIdCliente(String idCliente) {
